@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/books")
@@ -26,8 +27,8 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public Book findById(@PathVariable Long id) {
-        return bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
+    public Optional<Book> findById(@PathVariable Long id) {
+        return bookRepository.findById(id);
     }
 
     @PostMapping
@@ -38,7 +39,6 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
         bookRepository.deleteById(id);
     }
 
@@ -47,9 +47,8 @@ public class BookController {
         if(book.getId() != id) {
             throw new BookIdMismatchException();
         }
-        bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
+        bookRepository.findById(id);
         return bookRepository.save(book);
     }
-
 
 }
